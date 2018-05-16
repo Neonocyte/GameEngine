@@ -1,5 +1,5 @@
 # GameEngine
-A component based game engine utilizing SDL2 and a component based architecture.
+A component based game engine utilizing SDL2 and a component based architecture in C++.
 
 Currently, only the graphics system has been completed; compiling the project will produce a simple demo.
 
