@@ -30,17 +30,18 @@ void GraphicsSystem::update(){
 	
 	for(auto entity : Entity::entityVector){
 		//TODO: Get draw components and update
-		StaticLocationComponent *staticLocationComp;
-		StaticGraphicsComponent *staticGraphicsComp;
+		LocationComponent *locationComp;
+		GraphicsComponent *graphicsComp;
 		
-		//std::cout << "grabbing entity" << std::endl;
 		
-		if((staticLocationComp = static_cast<StaticLocationComponent*>(entity->getComponent<StaticLocationComponent>())) && (staticGraphicsComp = static_cast<StaticGraphicsComponent*>(entity->getComponent<StaticGraphicsComponent>()))){
-			std::cout << "starting draw" << std::endl;
-			Location entityLoc = staticLocationComp->getLocation();
-			std::cout << "location retrieved: " << entityLoc.x << " " << entityLoc.y << std::endl;
-			staticGraphicsComp->draw(mainRenderer, entityLoc.x, entityLoc.y);
-			std::cout << "finished drawing an entity" << std::endl;
+		if((locationComp = static_cast<LocationComponent*>(entity->getComponent(CG_Location))) && (graphicsComp = static_cast<GraphicsComponent*>(entity->getComponent(CG_Graphics)))){
+			//std::cout << "starting draw" << std::endl;
+			Location entityLoc = locationComp->getLocation();
+			//std::cout << "location retrieved: " << entityLoc.x << " " << entityLoc.y << std::endl;
+			graphicsComp->draw(mainRenderer, entityLoc.x, entityLoc.y);
+			//std::cout << "finished drawing an entity" << std::endl;
+		}else{
+			//std::cout << "Error obtaining component" << std::endl;
 		}
 		//Location entityLoc = entity->getComponent<StaticLocationComponent>()->getLocation();
 		//entity->getComponent<StaticGraphicsComponent>()->draw(mainRenderer, entityLoc.x, entityLoc.y);

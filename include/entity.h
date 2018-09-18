@@ -38,25 +38,29 @@ class Entity{
 				Any arguments are then forwarded to the constructor of the component.
 			*/
 			
-			//TODO: An array would yield better performance than a map; however, not yet an issue
-			components.emplace(typeid(T), std::unique_ptr<T>(new T(std::forward<Args>(args)...)));
-			
+			//SOLVED?: TODO: An array would yield better performance than a map; however, not yet an issue
+			//components.emplace(typeid(T), std::unique_ptr<T>(new T(std::forward<Args>(args)...)));
 			//The following are other potential paths to implementing the function. However, they may require updates or have caveats for their usage.
 			//components.insert(std::pair<std::type_index,std::unique_ptr<Component>>(typeid(T), std::unique_ptr<T>(new T(std::forward<Args>(args)...))));
 			//components[std::typeid(T)] = new T;
 			//components.insert(std::make_pair(typeid(T), new T));
+			components[T::group] = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+			
+			
 			
 			return;
 		}
 		
-		template<class T> 
-		Component *getComponent(){
-			return components[typeid(T)].get();
+		Component *getComponent(ComponentGroup cg){
+			return components[cg].get();
 		}
 		
 	private:
 		int x, y, width, height;
-		std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
+		
+		//Previous revisions used a map to store components, rather than an array.
+		//std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
+		std::unique_ptr<Component> components[ComponentGroup::CG_Max] = {};
 		//TODO: implement static list of components and method to call. Make template get method for components, to allow searches for a specific type.
 };
 

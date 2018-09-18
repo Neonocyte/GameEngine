@@ -88,12 +88,23 @@ bool init(){
 			systemsVector.push_back(new GraphicsSystem(mainWindow));
 			
 			//TODO: remove temporary entity creation in following lines
-			StaticLocationComponent *staticLocationComp;
+			LocationComponent *staticLocationComp;
 			
-			if(staticLocationComp = static_cast<StaticLocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent<StaticLocationComponent>())){
+			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
 				staticLocationComp->setLocation(15,15);
 			}
 			
+			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+				staticLocationComp->setLocation(80,15);
+			}
+			
+			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+				staticLocationComp->setLocation(110,15);
+			}
+			
+			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+				staticLocationComp->setLocation(150,15);
+			}
 			//std::cout << "Init finished." << std::endl;
 			
 			/*

@@ -1,13 +1,13 @@
 #include "../include/location_components.h"
 
-void StaticLocationComponent::setLocation(int newX, int newY){
+void LocationComponent::setLocation(int newX, int newY){
 	x = newX;
 	y = newY;
 	
 	return;
 }
 
-Location StaticLocationComponent::getLocation(){
+Location LocationComponent::getLocation(){
 	Location output;
 	
 	output.x = x;

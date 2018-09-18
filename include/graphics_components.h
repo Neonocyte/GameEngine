@@ -8,12 +8,13 @@
 #include "component.h"
 #include "resource_manager.h"
 
-class StaticGraphicsComponent : public Component{
+class GraphicsComponent : public Component{
 	public:
-		StaticGraphicsComponent();
-		StaticGraphicsComponent(std::string imageID);
 		//StaticGraphicsComponent(std::string imageID, int x, int y, int width, int height);
 		//void update() override;
+		
+		const static ComponentGroup group = CG_Graphics;
+		
 		void draw(SDL_Renderer *renderer, int x, int y);
 		void setImage(std::string imageID);
 		void setSubimage(int x, int y, int width, int height);
@@ -21,6 +22,13 @@ class StaticGraphicsComponent : public Component{
 		//TODO: replace subimage dimensions with SDL_Rect?
 		int subimageX = 0, subimageY = 0, subimageWidth, subimageHeight;
 		SDL_Texture *imageTexture;
+};
+
+class StaticGraphicsComponent : public GraphicsComponent{
+	public:
+		StaticGraphicsComponent();
+		StaticGraphicsComponent(std::string imageID);
+
 };
 
 #endif

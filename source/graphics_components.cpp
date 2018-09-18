@@ -4,7 +4,7 @@ StaticGraphicsComponent::StaticGraphicsComponent(std::string imageID){
 	setImage(imageID);
 }
 
-void StaticGraphicsComponent::setImage(std::string imageID){
+void GraphicsComponent::setImage(std::string imageID){
 	imageTexture = ResourceManager::getTexture(imageID);
 	
 	//Reset subimage to include the entire texture
@@ -15,7 +15,7 @@ void StaticGraphicsComponent::setImage(std::string imageID){
 	return;
 }
 
-void StaticGraphicsComponent::setSubimage(int x, int y, int width, int height){
+void GraphicsComponent::setSubimage(int x, int y, int width, int height){
 	subimageX = x;
 	subimageY = y;
 	subimageWidth = width;
@@ -24,7 +24,7 @@ void StaticGraphicsComponent::setSubimage(int x, int y, int width, int height){
 	return;
 }
 
-void StaticGraphicsComponent::draw(SDL_Renderer *renderer, int x, int y){
+void GraphicsComponent::draw(SDL_Renderer *renderer, int x, int y){
 	SDL_Rect srcrect, dstrect;
 	
 	//std::cout << "Graphics Component draw start" << std::endl;
@@ -43,6 +43,7 @@ void StaticGraphicsComponent::draw(SDL_Renderer *renderer, int x, int y){
 	dstrect.h = subimageHeight;
 	
 	//std::cout << "SDL_Rect constructed" << std::endl;
+	std::cout << "Texture " << imageTexture << std::endl;
 	
 	
 	SDL_RenderCopy(renderer, imageTexture, &srcrect, &dstrect);

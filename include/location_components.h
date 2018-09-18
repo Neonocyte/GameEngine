@@ -10,13 +10,20 @@ struct Location{
 	int y = 0;
 };
 
-class StaticLocationComponent : public Component{
+class LocationComponent : public Component{
 	public:
 		//void update() override;
 		Location getLocation();
+		
+		const static ComponentGroup group = CG_Location;
+		
 		void setLocation(int newX, int newY);
 	private:
 		int x = 0, y = 0;
+};
+
+class StaticLocationComponent : public LocationComponent{
+	
 };
 
 #endif
