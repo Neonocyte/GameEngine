@@ -10,8 +10,6 @@
 
 class GraphicsComponent : public Component{
 	public:
-		//StaticGraphicsComponent(std::string imageID, int x, int y, int width, int height);
-		//void update() override;
 		
 		const static ComponentGroup group = CG_Graphics;
 		

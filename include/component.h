@@ -11,12 +11,13 @@ enum ComponentGroup{
 	CG_Unknown = -1,
 	CG_Graphics = 0,
 	CG_Location,
+	CG_Physics,
 	CG_Max
 };
 
 class Component{
 	/*
-		Components compose the functionality of an Entity.
+		Components compose the functionality of an Entity, and are called instead of using functions within an Entity.
 	*/
 	public:
 		//virtual void update();

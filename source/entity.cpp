@@ -6,6 +6,7 @@ Entity *Entity::make_entity(EntityType entityType){
 	Entity *newEntity = new Entity;
 	switch(entityType){
 		case EntityType::ET_Furin:
+			//ET_Furin is an entity used only for testing.
 			newEntity->addComponent<StaticGraphicsComponent>("furin");
 			newEntity->addComponent<StaticLocationComponent>();
 			break;

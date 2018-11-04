@@ -15,3 +15,10 @@ Location LocationComponent::getLocation(){
 	
 	return output;	
 }
+
+void LocationComponent::translate(int incX, int incY){
+	x += incX;
+	y += incY;
+	
+	return;
+}

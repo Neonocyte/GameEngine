@@ -20,49 +20,41 @@ std::string windowTitle = "Game Demo";
 std::vector<System*> systemsVector;
 
 SDL_Window* mainWindow = nullptr;
-//SDL_Surface* mainSurface = NULL;
-//TODO: Remove testTexture
-//SDL_Texture* testTexture = nullptr;
 SDL_Event e;
 
 bool init();
+bool initTests();
 void processInput();
-//void draw();
-//SDL_Renderer* mainRenderer = nullptr;
-//SDL_Texture* loadTexture(std::string path);
 void close();
 void logError(std::string error);
 
 int main(int argv, char** args){
 	
 	if(init()){
-		//TODO: remove testTexture and its loop
-		//testTexture = loadTexture("./images/furin.png");
-		//if(testTexture != nullptr){
-			while(running){
-				auto start = std::chrono::high_resolution_clock::now();
-				
-				processInput();
-				//draw();
-				
-				for(System* curSystem : systemsVector){
-					//std::cout << "in loop" << std::endl;
-					curSystem->update();
-				}
-				
-				//TODO: research consistent delay times. The thread library requires MinGW to use POSIX threads, and both SDL_Delay() and sleep_for() may have inconsistent timing. If this becomes a problem, a custom delay may be required.
-				//Make each loop last the same amount of time by adding a delay.
-				auto end = std::chrono::high_resolution_clock::now();
-				//TODO: This compiles, but is highly suspect. Is loopDuration correct?
-				std::chrono::duration<float> loopDuration = end - start; //duration is measured in seconds
-				//Delay only if loop is ahead of target MS_PER_FRAME
-				int delay = MS_PER_FRAME - (loopDuration.count() * 100);
-				if(delay > 0){
-					SDL_Delay(MS_PER_FRAME - (loopDuration.count() * 100));
-				}
-				//std::this_thread::sleep_for(std::chrono::milliseconds((double)MS_PER_FRAME - loopDuration));
+		while(running){
+			auto start = std::chrono::high_resolution_clock::now();
+			
+			processInput();
+			
+			for(System* curSystem : systemsVector){
+				//std::cout << "in loop" << std::endl;
+				curSystem->update();
 			}
-		//}
+			
+			//TODO: research consistent delay times. The thread library requires MinGW to use POSIX threads, and both SDL_Delay() and sleep_for() may have inconsistent timing. If this becomes a problem, a custom delay may be required.
+			//Make each loop last the same amount of time by adding a delay.
+			auto end = std::chrono::high_resolution_clock::now();
+			
+			//TODO: This compiles, but is highly suspect. Is loopDuration correct?
+			std::chrono::duration<float> loopDuration = end - start; //duration is measured in seconds
+			
+			//Delay only if loop is ahead of target MS_PER_FRAME
+			int delay = MS_PER_FRAME - (loopDuration.count() * 100);
+			if(delay > 0){
+				SDL_Delay(MS_PER_FRAME - (loopDuration.count() * 100));
+			}
+			//std::this_thread::sleep_for(std::chrono::milliseconds((double)MS_PER_FRAME - loopDuration));
+		}
 		
 		close();
 	}
@@ -75,53 +67,74 @@ bool init(){
 	
 	//Initialize SDL, exiting if failed
 	if(SDL_Init(SDL_INIT_VIDEO) < 0){
-		//std::cout << "SDL could not initialize. SDL_Error: " << SDL_GetError() << std::endl;
 		logError("SDL could not initialize. SDL_Error: " + std::string(SDL_GetError()));
 		initSuccess = false;
 	}else{
 		mainWindow = SDL_CreateWindow(windowTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, SDL_WINDOW_SHOWN);
 		if(mainWindow == nullptr){
-			//std::cout << "SDL could not create a window. SDL_Error: " << SDL_GetError() << std::endl;
 			logError("SDL could not create a window. SDL_Error: " + std::string(SDL_GetError()));
 			initSuccess = false;
 		}else{
+			systemsVector.push_back(new MovementSystem());
 			systemsVector.push_back(new GraphicsSystem(mainWindow));
 			
-			//TODO: remove temporary entity creation in following lines
-			LocationComponent *staticLocationComp;
-			
-			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
-				staticLocationComp->setLocation(15,15);
-			}
-			
-			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
-				staticLocationComp->setLocation(80,15);
-			}
-			
-			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
-				staticLocationComp->setLocation(110,15);
-			}
-			
-			if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
-				staticLocationComp->setLocation(150,15);
-			}
-			//std::cout << "Init finished." << std::endl;
-			
-			/*
-			mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
-			if(mainRenderer == nullptr){
-				logError("Renderer could not initialize. SDL Error: " + std::string(SDL_GetError()));
+			//TODO: make test run on compile flag
+			if(!initTests()){
+				logError("Tests could not initialize.");
 				initSuccess = false;
-			}else{
-				SDL_SetRenderDrawColor(mainRenderer, 0xF5, 0xE3, 0xAD, 0xFF);
-				
-				int imgFlags = IMG_INIT_PNG;
-				if(!(IMG_Init(imgFlags) & imgFlags)){
-					//std::cout << "SDL_image could not initialize. SDL_image Error: " << IMG_GetError() << std::endl;
-					logError("SDL_image could not initialize. SDL_image Error: " + std::string(IMG_GetError()));
-					initSuccess = false;
-				}
-			}*/
+			}
+		}
+	}
+	
+	return initSuccess;
+}
+
+bool initTests(){
+	//Code to initialize tests. Not to be run in final build.
+	bool initSuccess = true;
+	
+	
+	//Create a series of entities with locations for testing purposes. ET_Furin is a basic entity type only used for test purposes.
+	Entity *testEntity = NULL;
+	LocationComponent *staticLocationComp;
+	
+	if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+		staticLocationComp->setLocation(15,15);
+	}else{
+		logError("Could not set new entity location during testing");
+	}
+	
+	if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+		staticLocationComp->setLocation(80,15);
+	}else{
+		logError("Could not set new entity location during testing");
+	}
+	
+	if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+		staticLocationComp->setLocation(110,15);
+	}else{
+		logError("Could not set new entity location during testing");
+	}
+	
+	if(staticLocationComp = static_cast<LocationComponent*>(Entity::make_entity(EntityType::ET_Furin)->getComponent(CG_Location))){
+		staticLocationComp->setLocation(150,15);
+	}else{
+		logError("Could not set new entity location during testing");
+	}
+	
+	
+	//Create entity for physics test
+	if((testEntity = Entity::make_entity(EntityType::ET_Furin)) == NULL){
+		logError("Could not create new test entity");
+	}else{
+		if(staticLocationComp = static_cast<LocationComponent*>(testEntity->getComponent(CG_Location))){
+			staticLocationComp->setLocation(50,50);
+			testEntity->addComponent<ConstantPhysicsComponent>(3,3);
+			if(!(testEntity->getComponent(CG_Physics))){
+				logError("Could not add ConstantPhysicsComponent to an entity during testing");
+			}
+		}else{
+			logError("Could not set new entity location during testing");
 		}
 	}
 	
@@ -130,6 +143,8 @@ bool init(){
 
 void processInput(){
 	//TODO: Properly store input for Components to reference - move to a system.
+	//TODO: allow the quit event to end the program without completing another cycle.
+	//processInput should be used to gather input from the machine, but should only be used to escape from the game in case of a Control system error.
 	while(SDL_PollEvent(&e) != 0){
 		if(e.type == SDL_QUIT){
 			running = false;
@@ -137,52 +152,8 @@ void processInput(){
 	}
 }
 
-/*
-void draw(){	
-	//TODO: Remove following temp code - move drawing to appropriate systems
-	//Following SDL_Rect is to prevent stretching while rendering testTexture
-	SDL_Rect dstrect;
-	
-	dstrect.x = 20;
-	dstrect.y = 0;
-	dstrect.w = 25 * 2;
-	dstrect.h = 77 * 2;
-	
-	SDL_RenderClear(mainRenderer);
-	SDL_RenderCopy(mainRenderer, testTexture, nullptr, &dstrect);
-	SDL_RenderPresent(mainRenderer);
-	
-}
-*/
-
-/*
-SDL_Texture* loadTexture(std::string path){
-	SDL_Texture* optimizedTexture = nullptr;
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str()); //can be replaced with BMP_Load if using .bmp file
-	
-	if(loadedSurface == nullptr){
-		//std::cout << "Unable to load image " << path << ". SDL_image Error: " << IMG_GetError() << std::endl;
-		logError("Unable to load image " + path + ". SDL_image Error: " + std::string(IMG_GetError()));
-	}else{
-		optimizedTexture = SDL_CreateTextureFromSurface(mainRenderer, loadedSurface);
-		if(optimizedTexture == nullptr){
-			//std::cout << "Unable to optimize image " << path << ". SDL Error: " << SDL_GetError() << std::endl;
-			logError("Unable to create texture from " + path + ". SDL Error: " + std::string(SDL_GetError()));
-		}
-		SDL_FreeSurface(loadedSurface);
-	}
-	
-	return optimizedTexture;
-}
-*/
-
 void close(){
 	//TODO: free loaded textures
-	
-	//TODO: remove this cleanup after properly implementing graphics.
-	//SDL_DestroyTexture(testTexture);
-	
-	//SDL_DestroyRenderer(mainRenderer);
 	
 	SDL_DestroyWindow(mainWindow);
 	
@@ -193,5 +164,7 @@ void close(){
 
 void logError(std::string error){//Stub
 	//TODO: Should probably print to a file.
+	//TODO: Move error logging to its own cpp file
+	//TODO: Implement proper logging in graphics_system.cpp
 	std::cout << error << std::endl;
 }

@@ -43,8 +43,6 @@ void GraphicsSystem::update(){
 		}else{
 			//std::cout << "Error obtaining component" << std::endl;
 		}
-		//Location entityLoc = entity->getComponent<StaticLocationComponent>()->getLocation();
-		//entity->getComponent<StaticGraphicsComponent>()->draw(mainRenderer, entityLoc.x, entityLoc.y);
 	}
 	
 	SDL_RenderPresent(mainRenderer);

@@ -18,6 +18,7 @@ class LocationComponent : public Component{
 		const static ComponentGroup group = CG_Location;
 		
 		void setLocation(int newX, int newY);
+		void translate(int incX, int incY);
 	private:
 		int x = 0, y = 0;
 };
